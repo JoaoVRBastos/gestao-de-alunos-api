@@ -1,0 +1,45 @@
+{
+  "alunosValidos": [
+    { "nome": "João Victor Bastos", "email": "joao.bastos@example.com", "matricula": "2026001", "senha": "senha@123" },
+    { "nome": "Maria Oliveira", "email": "maria.oliveira@example.com", "matricula": "2026002", "senha": "maria#2026" },
+    { "nome": "Pedro Santos", "email": "pedro.santos@example.com", "matricula": "2026003", "senha": "pedro!456" }
+  ],
+  "alunosInvalidos": [
+    {
+      "descricao": "o nome não for informado",
+      "aluno": { "email": "sem.nome@example.com", "matricula": "2026901", "senha": "123456" },
+      "status": 400,
+      "erro": "Os campos \"nome\", \"email\", \"matricula\" e \"senha\" são obrigatórios."
+    },
+    {
+      "descricao": "o e-mail não for informado",
+      "aluno": { "nome": "Sem E-mail", "matricula": "2026902", "senha": "123456" },
+      "status": 400,
+      "erro": "Os campos \"nome\", \"email\", \"matricula\" e \"senha\" são obrigatórios."
+    },
+    {
+      "descricao": "a matrícula não for informada",
+      "aluno": { "nome": "Sem Matrícula", "email": "sem.matricula@example.com", "senha": "123456" },
+      "status": 400,
+      "erro": "Os campos \"nome\", \"email\", \"matricula\" e \"senha\" são obrigatórios."
+    },
+    {
+      "descricao": "a senha não for informada",
+      "aluno": { "nome": "Sem Senha", "email": "sem.senha@example.com", "matricula": "2026904" },
+      "status": 400,
+      "erro": "Os campos \"nome\", \"email\", \"matricula\" e \"senha\" são obrigatórios."
+    },
+    {
+      "descricao": "o e-mail já estiver cadastrado",
+      "aluno": { "nome": "Ana Duplicada", "email": "ana.souza@example.com", "matricula": "2026905", "senha": "123456" },
+      "status": 409,
+      "erro": "Já existe um aluno cadastrado com essa matrícula ou e-mail."
+    },
+    {
+      "descricao": "a matrícula já estiver cadastrada",
+      "aluno": { "nome": "Matrícula Duplicada", "email": "matricula.duplicada@example.com", "matricula": "2024001", "senha": "123456" },
+      "status": 409,
+      "erro": "Já existe um aluno cadastrado com essa matrícula ou e-mail."
+    }
+  ]
+}

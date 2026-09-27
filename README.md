@@ -1,5 +1,7 @@
 # Gestão de Alunos API
 
+[![Testes de API](https://github.com/JoaoVRBastos/gestao-de-alunos-api/actions/workflows/tests.yml/badge.svg)](https://github.com/JoaoVRBastos/gestao-de-alunos-api/actions/workflows/tests.yml)
+
 API REST para gestão de alunos, disciplinas, notas e trabalhos, com persistência em MongoDB.
 
 ## Descrição
@@ -110,6 +112,63 @@ MONGODB_URI="mongodb://usuario:senha@host:27017/nome-do-banco" npm start
 Na primeira execução com o banco vazio, a API popula automaticamente as coleções com o conjunto de
 dados fake descrito em [Dados fake pré-carregados](#dados-fake-pré-carregados). Em execuções
 seguintes, os dados já existentes são preservados.
+
+## Testes automatizados de API
+
+Os testes usam **Mocha**, **Supertest** e **Chai** e são executados contra a API em execução,
+cujo endereço é lido do arquivo `.env` (via **dotenv**). Eles cobrem o fluxo:
+
+1. login como administrador;
+2. cadastro de um aluno pelo administrador (e matrícula do aluno em disciplinas);
+3. login como aluno;
+4. registro da entrega de um trabalho pelo aluno.
+
+### Como executar
+
+```bash
+# 1. criar o arquivo .env a partir do exemplo
+cp .env.example .env
+
+# 2. subir a API (em um terminal separado; requer MongoDB acessível)
+npm start
+
+# 3. executar os testes
+npm test
+```
+
+| Variável      | Descrição                                        |
+|---------------|--------------------------------------------------|
+| `BASE_URL`    | URL da API sob teste (ex.: `http://localhost:3000`) |
+| `ADMIN_EMAIL` | E-mail do administrador pré-cadastrado           |
+| `ADMIN_SENHA` | Senha do administrador pré-cadastrado            |
+
+### Organização
+
+```
+test/
+  data/                 # massa de dados (data-driven testing)
+    login.json          # alunos pré-cadastrados e credenciais inválidas
+    alunos.json         # alunos válidos e inválidos para cadastro
+    trabalhos.json      # aluno, matrículas e entregas válidas/inválidas
+  helpers/
+    api.js              # carrega o .env e cria o cliente Supertest com a BASE_URL
+    login.js            # helpers loginAdmin() e loginAluno(email, senha)
+    dados.js            # leitura dos JSON e geração de e-mail/matrícula únicos
+  auth.test.js          # POST /api/auth/login
+  alunos.test.js        # POST /api/admin/alunos
+  trabalhos.test.js     # POST /api/alunos/:alunoId/trabalhos (fluxo completo)
+```
+
+Cada caso de teste é gerado a partir dos registros dos arquivos JSON: para incluir um novo cenário,
+basta adicionar um item no arquivo correspondente. E-mails e matrículas recebem um sufixo único a
+cada execução, e os alunos criados são removidos ao final, permitindo reexecutar os testes no mesmo
+banco.
+
+### Integração contínua
+
+O workflow [`.github/workflows/tests.yml`](.github/workflows/tests.yml) roda a cada push e pull
+request na `main`: sobe um MongoDB como service container, cria o `.env` a partir do
+`.env.example`, inicia a API em segundo plano, aguarda ela responder e executa `npm test`.
 
 ## Documentação da API (Swagger)
 

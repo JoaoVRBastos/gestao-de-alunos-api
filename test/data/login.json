@@ -1,0 +1,39 @@
+{
+  "alunosPreCadastrados": [
+    { "nome": "Ana Souza", "email": "ana.souza@example.com", "senha": "123456" },
+    { "nome": "Bruno Lima", "email": "bruno.lima@example.com", "senha": "123456" },
+    { "nome": "Carla Mendes", "email": "carla.mendes@example.com", "senha": "123456" }
+  ],
+  "credenciaisInvalidas": [
+    {
+      "descricao": "a senha do administrador estiver incorreta",
+      "credenciais": { "email": "admin@escola.com", "senha": "senha-incorreta" },
+      "status": 401,
+      "erro": "E-mail ou senha inválidos."
+    },
+    {
+      "descricao": "a senha do aluno estiver incorreta",
+      "credenciais": { "email": "ana.souza@example.com", "senha": "senha-incorreta" },
+      "status": 401,
+      "erro": "E-mail ou senha inválidos."
+    },
+    {
+      "descricao": "o e-mail não estiver cadastrado",
+      "credenciais": { "email": "nao.cadastrado@example.com", "senha": "123456" },
+      "status": 401,
+      "erro": "E-mail ou senha inválidos."
+    },
+    {
+      "descricao": "a senha não for informada",
+      "credenciais": { "email": "admin@escola.com" },
+      "status": 400,
+      "erro": "Os campos \"email\" e \"senha\" são obrigatórios."
+    },
+    {
+      "descricao": "o e-mail não for informado",
+      "credenciais": { "senha": "admin123" },
+      "status": 400,
+      "erro": "Os campos \"email\" e \"senha\" são obrigatórios."
+    }
+  ]
+}

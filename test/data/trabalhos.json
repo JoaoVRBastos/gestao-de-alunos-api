@@ -1,0 +1,61 @@
+{
+  "aluno": {
+    "nome": "Aluno Entrega de Trabalhos",
+    "email": "aluno.entrega@example.com",
+    "matricula": "2026100",
+    "senha": "entrega@123"
+  },
+  "disciplinasMatriculadas": ["disciplina-matematica", "disciplina-programacao-web"],
+  "entregasValidas": [
+    {
+      "descricao": "com título e descrição em Matemática",
+      "trabalho": {
+        "disciplinaId": "disciplina-matematica",
+        "titulo": "Lista de Exercícios 2",
+        "descricao": "Resolução dos exercícios de 1 a 15 do capítulo 3."
+      }
+    },
+    {
+      "descricao": "com título e descrição em Programação Web",
+      "trabalho": {
+        "disciplinaId": "disciplina-programacao-web",
+        "titulo": "API REST com Express",
+        "descricao": "CRUD de produtos com Express e MongoDB."
+      }
+    },
+    {
+      "descricao": "somente com os campos obrigatórios",
+      "trabalho": {
+        "disciplinaId": "disciplina-matematica",
+        "titulo": "Resumo de Geometria Analítica"
+      }
+    }
+  ],
+  "entregasInvalidas": [
+    {
+      "descricao": "o título não for informado",
+      "trabalho": { "disciplinaId": "disciplina-matematica" },
+      "status": 400,
+      "erro": "Os campos \"disciplinaId\" e \"titulo\" são obrigatórios."
+    },
+    {
+      "descricao": "a disciplina não for informada",
+      "trabalho": { "titulo": "Trabalho sem disciplina" },
+      "status": 400,
+      "erro": "Os campos \"disciplinaId\" e \"titulo\" são obrigatórios."
+    },
+    {
+      "descricao": "a disciplina não existir",
+      "trabalho": { "disciplinaId": "disciplina-inexistente", "titulo": "Trabalho perdido" },
+      "status": 404,
+      "erro": "Disciplina com id \"disciplina-inexistente\" não encontrada."
+    },
+    {
+      "descricao": "o aluno não estiver matriculado na disciplina",
+      "trabalho": { "disciplinaId": "disciplina-historia", "titulo": "Linha do Tempo - Idade Média" },
+      "status": 409,
+      "erro": "O aluno não está matriculado nesta disciplina."
+    }
+  ],
+  "alunoDeOutroCadastro": "aluno-ana-souza"
+}

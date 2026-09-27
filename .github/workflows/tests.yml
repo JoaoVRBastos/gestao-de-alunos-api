@@ -5,6 +5,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   test:
@@ -21,20 +22,44 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+    env:
+      MONGODB_URI: mongodb://127.0.0.1:27017/gestao-de-alunos-test
+
     steps:
       - name: Checkout do código
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configurar Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Instalar dependências
         run: npm ci
 
+      - name: Criar arquivo .env
+        run: cp .env.example .env
+
+      - name: Subir a API em segundo plano
+        run: nohup npm start > api.log 2>&1 &
+
+      - name: Aguardar a API responder
+        run: |
+          for tentativa in $(seq 1 30); do
+            if curl -sf http://localhost:3000/ > /dev/null; then
+              echo "API disponível após $tentativa tentativa(s)."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "A API não respondeu a tempo."
+          cat api.log
+          exit 1
+
       - name: Executar testes
         run: npm test
-        env:
-          MONGODB_URI: mongodb://127.0.0.1:27017/gestao-de-alunos-test
+
+      - name: Exibir log da API
+        if: always()
+        run: cat api.log
